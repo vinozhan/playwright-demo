@@ -5,8 +5,8 @@ import User from './models/User.js';
 const ADMIN_DEFAULTS = {
   firstName: 'Admin',
   lastName: 'User',
-  email: process.env.ADMIN_EMAIL || 'admin@cyclesync.lk',
-  password: process.env.ADMIN_PASSWORD || 'Admin@123',
+  email: process.env.ADMIN_EMAIL,
+  password: process.env.ADMIN_PASSWORD,
 };
 
 const seed = async () => {
