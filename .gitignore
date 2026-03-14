@@ -44,4 +44,9 @@ CLAUDE.md
 Todo.txt
 report.json
 TestDemoRequirements.txt
+test-results/
+playwright-report/
+MarkingRubric.md
+docs
+
 

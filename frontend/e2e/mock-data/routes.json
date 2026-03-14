@@ -1,0 +1,55 @@
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "_id": "route1",
+        "title": "Kandy Lake Loop",
+        "description": "A scenic ride around Kandy Lake with beautiful views of the Temple of the Tooth.",
+        "difficulty": "easy",
+        "surfaceType": "paved",
+        "distance": 5.2,
+        "estimatedDuration": 25,
+        "startPoint": { "lat": 7.2906, "lng": 80.6350 },
+        "endPoint": { "lat": 7.2906, "lng": 80.6350 },
+        "waypoints": [],
+        "averageRating": 4.5,
+        "reviewCount": 12,
+        "isVerified": true,
+        "createdBy": {
+          "_id": "user1",
+          "firstName": "Kamal",
+          "lastName": "Perera"
+        },
+        "createdAt": "2025-11-15T10:30:00.000Z"
+      },
+      {
+        "_id": "route2",
+        "title": "Colombo Coastal Trail",
+        "description": "Ride along the Galle Face Green promenade and Marine Drive with ocean breezes.",
+        "difficulty": "moderate",
+        "surfaceType": "mixed",
+        "distance": 12.8,
+        "estimatedDuration": 55,
+        "startPoint": { "lat": 6.9271, "lng": 79.8428 },
+        "endPoint": { "lat": 6.8950, "lng": 79.8612 },
+        "waypoints": [],
+        "averageRating": 4.0,
+        "reviewCount": 8,
+        "isVerified": false,
+        "createdBy": {
+          "_id": "user2",
+          "firstName": "Nimal",
+          "lastName": "Silva"
+        },
+        "createdAt": "2025-12-01T14:00:00.000Z"
+      }
+    ],
+    "pagination": {
+      "currentPage": 1,
+      "totalPages": 1,
+      "totalItems": 2,
+      "limit": 10
+    }
+  }
+}
