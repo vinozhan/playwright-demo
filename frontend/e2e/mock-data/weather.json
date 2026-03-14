@@ -1,0 +1,18 @@
+{
+  "success": true,
+  "data": {
+    "weather": {
+      "location": "Kandy",
+      "temperature": 26.3,
+      "feelsLike": 28.1,
+      "description": "partly cloudy",
+      "humidity": 72,
+      "windSpeed": 8.5,
+      "cycling": {
+        "score": 4,
+        "label": "Good",
+        "advisories": ["Light wind conditions", "Stay hydrated in warm weather"]
+      }
+    }
+  }
+}
