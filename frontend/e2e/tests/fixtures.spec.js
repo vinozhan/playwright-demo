@@ -130,5 +130,35 @@ test.describe('Feature 2: Fixtures & Setup/Teardown', () => {
 
       await expect(home.getStartedLink).toBeVisible();
     });
+
+    test('unauthenticated user is redirected from admin panel to login', async ({
+      page,
+    }) => {
+      await page.goto('/admin');
+
+      // ProtectedRoute should redirect unauthenticated users to /login
+      await expect(page).toHaveURL(/\/login/);
+    });
+  });
+
+  test.describe('Authorization — Role-Based Access', () => {
+    test('regular user (non-admin) should not see Admin link in navbar', async ({
+      authenticatedPage,
+    }) => {
+      await authenticatedPage.goto('/');
+
+      // Regular cyclist user should not have an Admin nav link
+      const adminLink = authenticatedPage.getByRole('navigation').getByRole('link', { name: 'Admin', exact: true });
+      await expect(adminLink).not.toBeVisible();
+    });
+
+    test('regular user (non-admin) should be redirected from admin panel to home', async ({
+      authenticatedPage,
+    }) => {
+      await authenticatedPage.goto('/admin');
+
+      // Non-admin users are redirected to home page by ProtectedRoute
+      await expect(authenticatedPage).toHaveURL('/', { timeout: 10000 });
+    });
   });
 });

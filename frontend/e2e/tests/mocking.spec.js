@@ -164,6 +164,18 @@ test.describe('Feature 3: Mocking & Stubbing with page.route()', () => {
     });
   });
 
+  test.describe('Mock Routes API — Network Errors', () => {
+    test('should handle network failure gracefully', async ({ page }) => {
+      // Simulate a network failure by aborting the request
+      await page.route('**/api/routes**', (route) => route.abort('connectionrefused'));
+
+      await page.goto('/routes');
+
+      // The page should still render without crashing
+      await expect(page.getByRole('heading', { name: /cycling routes/i })).toBeVisible();
+    });
+  });
+
   test.describe('Mock Weather API', () => {
     test('should render weather widget with mocked data', async ({ page }) => {
       // Mock auth for accessing route detail page (unauthenticated)

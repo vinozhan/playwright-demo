@@ -122,6 +122,123 @@ test.describe('Feature 1: Playwright Assertions', () => {
     });
   });
 
+  test.describe('Boundary Tests — Password Length', () => {
+    test('should reject password with exactly 7 characters (below minimum)', async ({ page }) => {
+      await page.goto('/register');
+
+      const passwordInput = page.locator('input[name="password"]');
+      const confirmPasswordInput = page.locator('input[name="confirmPassword"]');
+
+      // Boundary: 7 chars — just below the 8-char minimum
+      await passwordInput.fill('Abcde1x');
+      await confirmPasswordInput.click();
+
+      await expect(page.getByText(/must be at least 8 characters/i)).toBeVisible();
+    });
+
+    test('should accept password with exactly 8 characters (at minimum boundary)', async ({ page }) => {
+      await page.goto('/register');
+
+      const passwordInput = page.locator('input[name="password"]');
+      const confirmPasswordInput = page.locator('input[name="confirmPassword"]');
+
+      // Boundary: exactly 8 chars with uppercase, lowercase, and number
+      await passwordInput.fill('Abcdef1x');
+      await confirmPasswordInput.click();
+
+      // No validation error should appear — the password hint text should remain
+      await expect(page.getByText(/must be at least 8 characters/i)).not.toBeVisible();
+      await expect(page.getByText(/must include an uppercase letter/i)).not.toBeVisible();
+    });
+
+    test('should reject 8-char password missing uppercase letter', async ({ page }) => {
+      await page.goto('/register');
+
+      const passwordInput = page.locator('input[name="password"]');
+      const confirmPasswordInput = page.locator('input[name="confirmPassword"]');
+
+      // 8 chars, has lowercase and number, but no uppercase
+      await passwordInput.fill('abcdefg1');
+      await confirmPasswordInput.click();
+
+      await expect(page.getByText(/must include an uppercase letter/i)).toBeVisible();
+    });
+
+    test('should reject 8-char password missing lowercase letter', async ({ page }) => {
+      await page.goto('/register');
+
+      const passwordInput = page.locator('input[name="password"]');
+      const confirmPasswordInput = page.locator('input[name="confirmPassword"]');
+
+      // 8 chars, has uppercase and number, but no lowercase
+      await passwordInput.fill('ABCDEFG1');
+      await confirmPasswordInput.click();
+
+      await expect(page.getByText(/must include a lowercase letter/i)).toBeVisible();
+    });
+
+    test('should reject 8-char password missing a number', async ({ page }) => {
+      await page.goto('/register');
+
+      const passwordInput = page.locator('input[name="password"]');
+      const confirmPasswordInput = page.locator('input[name="confirmPassword"]');
+
+      // 8 chars, has uppercase and lowercase, but no number
+      await passwordInput.fill('Abcdefgh');
+      await confirmPasswordInput.click();
+
+      await expect(page.getByText(/must include a number/i)).toBeVisible();
+    });
+  });
+
+  test.describe('Negative Tests — Invalid Input & Error Handling', () => {
+    test('should show invalid email error for malformed email', async ({ page }) => {
+      await page.goto('/register');
+
+      const emailInput = page.locator('input[name="email"]');
+      const passwordInput = page.locator('input[name="password"]');
+
+      // Type an email without a domain
+      await emailInput.fill('notanemail');
+      await passwordInput.click();
+
+      await expect(page.getByText(/invalid email address/i)).toBeVisible();
+    });
+
+    test('should show invalid email error for email missing TLD', async ({ page }) => {
+      await page.goto('/register');
+
+      const emailInput = page.locator('input[name="email"]');
+      const passwordInput = page.locator('input[name="password"]');
+
+      // Email with @ but no valid TLD
+      await emailInput.fill('user@domain');
+      await passwordInput.click();
+
+      await expect(page.getByText(/invalid email address/i)).toBeVisible();
+    });
+
+    test('should not submit login form with empty required fields', async ({ page }) => {
+      await page.goto('/login');
+
+      // Click submit without filling any fields — HTML required should prevent submission
+      await page.getByRole('button', { name: /sign in/i }).click();
+
+      // Should remain on login page (form not submitted)
+      await expect(page).toHaveURL(/\/login/);
+    });
+
+    test('should not submit register form with empty required fields', async ({ page }) => {
+      await page.goto('/register');
+
+      // Click submit without filling any fields
+      await page.getByRole('button', { name: /create account/i }).click();
+
+      // Should remain on register page
+      await expect(page).toHaveURL(/\/register/);
+    });
+  });
+
   test.describe('Navigation Assertions', () => {
     test('should navigate to routes page from home', async ({ page }) => {
       const home = new HomePage(page);
